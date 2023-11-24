@@ -13,11 +13,7 @@ class FileStorage:
         """Returns a dictionary of models currently in storage
             - [filter by classname]"""
         if cls:
-            return [
-                FileStorage.__objects[k]
-                for k in FileStorage.__objects.keys()
-                if k.split('.')[0] == cls
-            ]
+            return {k: v for k, v in FileStorage.__objects.items() if isinstance(v, cls)}
         return FileStorage.__objects
 
     def new(self, obj):

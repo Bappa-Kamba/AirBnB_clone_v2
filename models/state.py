@@ -3,17 +3,24 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
+from os import getenv
 
+storage_type = getenv("HBNB_TYPE_STORAGE")
 
 
 class State(BaseModel, Base):
     """ State class """
     __tablename__ = "states"
-    id = Column(Integer, primary_key=True, nullable=False)
-    name = Column(String(128), nullable=False)
 
-    cities = relationship("City", cascade="all, delete",
-                          back_ref="state")
+    if storage_type == 'db':
+        id = Column(Integer, primary_key=True, nullable=False)
+        name = Column(String(128), nullable=False)
+
+        cities = relationship("City", cascade="all, delete",
+                            back_ref="state")
+    else:
+        id = ""
+        name = ""
 
     @property
     def cities(self):

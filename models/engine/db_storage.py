@@ -49,7 +49,7 @@ class DBStorage:
             for obj in objs:
                 key = "{}.{}".format(obj.__class__.__name__, obj.id)
                 db_dict[key] = obj
-            return db_dict
+        return db_dict
 
     def new(self, obj):
         '''

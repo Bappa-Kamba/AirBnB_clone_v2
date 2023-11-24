@@ -3,9 +3,13 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from os import getenv
-from models.base_model import Base
-import models
-
+from models.base_model import Base, BaseModel
+from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 class DBStorage:
     """This class manages storage of hbnb models in a database"""
 
@@ -24,6 +28,8 @@ class DBStorage:
         if env == "test":
             # drop all tables
             Base.metadata.drop_all(self.__engine)
+        self.__session = scoped_session(sessionmaker(
+            bind=self.__engine, expire_on_commit=False))
         
     def all(self, cls=None):
         '''
@@ -31,22 +37,18 @@ class DBStorage:
         '''
         db_dict = {}
 
-        if cls != "":
-            objs = self.__session.query(models.classes[cls]).all()
+        if cls is None:
+            classes = [User, State, City, Amenity, Place, Review]
+            for c in classes:
+                objs = self.__session.query(c).all()
+                for obj in objs:
+                    key = "{}.{}".format(obj.__class__.__name__, obj.id)
+                    db_dict[key] = obj
+        else:
+            objs = self.__session.query(cls).all()
             for obj in objs:
                 key = "{}.{}".format(obj.__class__.__name__, obj.id)
                 db_dict[key] = obj
-            return db_dict
-
-        else:
-            for k, v in models.classes.items():
-                if k != "BaseModel":
-                    objs = self.__session.query(v).all()
-                    if len(objs) > 0:
-                        for obj in objs:
-                            key = "{}.{}".format(obj.__class__.__name__,
-                                                 obj.id)
-                            db_dict[key] = obj
             return db_dict
 
     def new(self, obj):
@@ -72,7 +74,7 @@ class DBStorage:
         '''
             Commit all changes of current database session
         '''
-        self.__session = Base.metadata.create_all(self.__engine)
+        Base.metadata.create_all(self.__engine)
         factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(factory)
         self.__session = Session()

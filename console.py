@@ -115,7 +115,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        """ create <Class name> <param 1> <param 2> <param 3>..."""
+        """ Syntax: create <Class name> <param 1> <param 2> <param 3>..."""
         args = parse(args)
         if not args:
             print("** class name missing **")
@@ -137,7 +137,8 @@ class HBNBCommand(cmd.Cmd):
     def help_create(self):
         """ Help information for the create method """
         print("Creates a class of any type")
-        print("[Usage]: create <className>\n")
+        print("[Usage]: create <className>")
+        print("[Usage]: create <Class name> <param 1> <param 2>...")
 
     def do_show(self, args):
         """ Method to show an individual object """

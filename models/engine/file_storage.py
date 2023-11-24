@@ -8,8 +8,15 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = {}
 
-    def all(self):
-        """Returns a dictionary of models currently in storage"""
+    def all(self, cls=None):
+        """Returns a dictionary of models currently in storage
+            - [filter by classname]"""
+        if cls:
+            cls_objects = []
+            for key, value in FileStorage.__objects.items():
+                if key.split('.')[0] == cls:
+                    cls_objects.append(value)
+            return cls_objects
         return FileStorage.__objects
 
     def new(self, obj):
@@ -48,3 +55,56 @@ class FileStorage:
                         self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
+
+    def delete(self, obj=None):
+        """
+        Deletes an obj
+        """
+        if obj is not None:
+            key = str(obj.__class__.__name__) + "." + str(obj.id)
+            FileStorage.__objects.pop(key, None)
+            self.save()
+
+
+fs = FileStorage()
+from models.state import State
+# All States
+all_states = fs.all(State)
+print("All States: {}".format(len(all_states.keys())))
+for state_key in all_states.keys():
+    print(all_states[state_key])
+
+# Create a new State
+new_state = State()
+new_state.name = "California"
+fs.new(new_state)
+fs.save()
+print("New State: {}".format(new_state))
+
+# All States
+all_states = fs.all(State)
+print("All States: {}".format(len(all_states.keys())))
+for state_key in all_states.keys():
+    print(all_states[state_key])
+
+# Create another State
+another_state = State()
+another_state.name = "Nevada"
+fs.new(another_state)
+fs.save()
+print("Another State: {}".format(another_state))
+
+# All States
+all_states = fs.all(State)
+print("All States: {}".format(len(all_states.keys())))
+for state_key in all_states.keys():
+    print(all_states[state_key])
+
+# Delete the new State
+fs.delete(new_state)
+
+# All States
+all_states = fs.all(State)
+print("All States: {}".format(len(all_states.keys())))
+for state_key in all_states.keys():
+    print(all_states[state_key])

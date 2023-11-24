@@ -12,10 +12,8 @@ class FileStorage:
         """Returns a dictionary of models currently in storage
             - [filter by classname]"""
         if cls:
-            # return objescts of type class
-            name = cls.__name__
-            objects = [{k: v for k, v in self.__objects.items() if isinstance(v, cls)}]
-            return objects
+            return [v for v in FileStorage.__objects.values()
+                    if v.get('__class__') == cls.__name__]
         return FileStorage.__objects
 
     def new(self, obj):

@@ -8,3 +8,4 @@ models/__pycache__/state.cpython-310.pyc
 models/__pycache__/user.cpython-310.pyc
 models/engine/__pycache__/__init__.cpython-310.pyc
 models/engine/__pycache__/file_storage.cpython-310.pyc
+test.py

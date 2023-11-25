@@ -83,18 +83,24 @@ class Place(BaseModel, Base):
         
         @property
         def amenities(self):
-            '''
-                Return list: amenity inst's if Amenity.place_id=curr place.id
-                FileStorage many to many relationship between Place and Amenity
-            '''
-            from models import storage
-            list_amenities = []
-            for amenity in storage.all(Amenity).values():
-                if amenity.place_id == self.id:
-                    list_amenities.append(amenity)
-            return list_amenities
+            from models import storage  # Import DBStorage
+
+            amenity_objs = []
+            for amenity_id in self.amenity_ids:
+                amenity = storage.all(Amenity).get("Amenity." + amenity_id)
+                if amenity:
+                    amenity_objs.append(amenity)
+            return amenity_objs
         
         @amenities.setter
-        def amenities(self, obj):
-            if isinstance(obj, Amenity):
-                self.amenity_ids.append(obj.id)
+        def amenities(self, amenity=None):
+            '''
+                Set list: amenity instances if Amenity.place_id==curr place.id
+                Set by adding instance objs to amenity_ids attribute in Place
+            '''
+            from models import storage
+            
+            if amenity:
+                for amenity in storage.all(Amenity).values():
+                    if amenity.place_id == self.id:
+                        self.amenity_ids.append(amenity)

@@ -22,7 +22,6 @@ class State(BaseModel, Base):
             backref="state"
         )
     else:
-        name = ""
         @property
         def cities(self):
             """ Getter attribute to retrieve cities associated with this state """

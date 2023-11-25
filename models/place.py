@@ -69,7 +69,7 @@ class Place(BaseModel, Base):
             "Amenity",
             secondary="place_amenity",
             viewonly=False,
-            backref="places"
+            back_populates="place_amenities"
         )
     else:
 

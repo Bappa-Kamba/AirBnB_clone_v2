@@ -37,18 +37,21 @@ class DBStorage:
         '''
         db_dict = {}
 
+        classes = [User, State, City, Amenity, Place, Review]
         if cls is None:
-            classes = [User, State, City, Amenity, Place, Review]
             for c in classes:
                 objs = self.__session.query(c).all()
                 for obj in objs:
                     key = "{}.{}".format(obj.__class__.__name__, obj.id)
                     db_dict[key] = obj
         else:
-            objs = self.__session.query(cls).all()
-            for obj in objs:
-                key = "{}.{}".format(obj.__class__.__name__, obj.id)
-                db_dict[key] = obj
+            for c in classes:
+                if c.__name__ == cls:
+                    objs = self.__session.query(c).all()
+                    for obj in objs:
+                        key = "{}.{}".format(obj.__class__.__name__, obj.id)
+                        db_dict[key] = obj
+                    break
         return db_dict
 
     def new(self, obj):

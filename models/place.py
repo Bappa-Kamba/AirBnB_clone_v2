@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
+from models.amenity import Amenity
 from sqlalchemy import (
     Column,
     String,
@@ -13,6 +14,25 @@ from sqlalchemy.orm import relationship
 from os import getenv
 
 storage_type = getenv("HBNB_TYPE_STORAGE")
+
+place_amenity = Table(
+    'place_amenity',
+    Base.metadata,
+    Column(
+        'place_id',
+        String(60),
+        ForeignKey('places.id'),
+        primary_key=True,
+        nullable=False
+    ),
+    Column(
+        'amenity_id',
+        String(60),
+        ForeignKey('amenities.id'),
+        primary_key=True,
+        nullable=False
+    )
+)
 
 class Place(BaseModel, Base):
     """ A place to stay """
@@ -35,24 +55,6 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     amenity_ids = []
-    place_amenity = Table(
-        'place_amenity',
-        Base.metadata,
-        Column(
-            'place_id',
-            String(60),
-            ForeignKey('places.id'),
-            primary_key=True,
-            nullable=False
-        ),
-        Column(
-            'amenity_id',
-            String(60),
-            ForeignKey('amenities.id'),
-            primary_key=True,
-            nullable=False
-        )
-    )
 
     if storage_type == 'db':
 
@@ -66,9 +68,10 @@ class Place(BaseModel, Base):
             "Amenity",
             secondary="place_amenity",
             viewonly=False,
-            backref="places"
+            backref="place_amenities"
         )
     else:
+
         @property
         def reviews(self):
             """ Getter attribute to retrieve cities associated with this state """
@@ -76,3 +79,21 @@ class Place(BaseModel, Base):
 
             reviews = storage.all(Place)
             return [review for review in reviews.values() if review.place_id == self.id]
+        
+        @property
+        def amenities(self):
+            '''
+                Return list: amenity inst's if Amenity.place_id=curr place.id
+                FileStorage many to many relationship between Place and Amenity
+            '''
+            from models import storage
+            list_amenities = []
+            for amenity in storage.all(Amenity).values():
+                if amenity.place_id == self.id:
+                    list_amenities.append(amenity)
+            return list_amenities
+        
+        @amenities.setter
+        def amenities(self, obj):
+            if isinstance(obj, Amenity):
+                self.amenity_ids.append(obj.id)

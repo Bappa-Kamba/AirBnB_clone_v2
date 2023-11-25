@@ -28,8 +28,8 @@ class DBStorage:
         if env == "test":
             # drop all tables
             Base.metadata.drop_all(self.__engine)
-        # self.__session = scoped_session(sessionmaker(
-        #     bind=self.__engine, expire_on_commit=False))
+        self.__session = scoped_session(sessionmaker(
+            bind=self.__engine, expire_on_commit=False))
         
     def all(self, cls=None):
         '''
@@ -69,11 +69,15 @@ class DBStorage:
         '''
         if obj is not None:
             self.__session.delete(obj)
+            self.save()
 
     def reload(self):
         '''
             Commit all changes of current database session
         '''
+        if self.__session:
+            self.__session.close()
+
         Base.metadata.create_all(self.__engine)
         factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(factory)

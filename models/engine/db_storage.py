@@ -71,8 +71,12 @@ class DBStorage:
             Delete from current database session
         '''
         if obj is not None:
-            self.__session.delete(obj)
-            self.save()
+            try:
+                self.__session.delete(obj)
+                self.save()
+            except Exception as e:
+                self.__session.rollback()  # Roll back changes if deletion fails
+                print(f"Error occurred while deleting: {e}")
 
     def reload(self):
         '''

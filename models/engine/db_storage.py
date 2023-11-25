@@ -37,7 +37,7 @@ class DBStorage:
         '''
         db_dict = {}
 
-        classes = [User, State, City, Amenity, Place, Review]
+        classes = [State, City]
         if cls is None:
             for c in classes:
                 objs = self.__session.query(c).all()

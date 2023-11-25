@@ -6,7 +6,8 @@ from sqlalchemy import (
     String,
     ForeignKey,
     Integer,
-    Float
+    Float,
+    Table
     )
 from sqlalchemy.orm import relationship
 from os import getenv
@@ -34,6 +35,24 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     amenity_ids = []
+    place_amenity = Table(
+        'place_amenity',
+        Base.metadata,
+        Column(
+            'place_id',
+            String(60),
+            ForeignKey('places.id'),
+            primary_key=True,
+            nullable=False
+        ),
+        Column(
+            'amenity_id',
+            String(60),
+            ForeignKey('amenities.id'),
+            primary_key=True,
+            nullable=False
+        )
+    )
 
     if storage_type == 'db':
 
@@ -41,6 +60,13 @@ class Place(BaseModel, Base):
             "Review",
             cascade="all, delete",
             backref="place"
+        )
+
+        amenities = relationship(
+            "Amenity",
+            secondary="place_amenity",
+            viewonly=False,
+            backref="places"
         )
     else:
         @property

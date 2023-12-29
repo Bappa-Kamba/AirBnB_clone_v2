@@ -24,7 +24,7 @@ def hello_world():
     Returns:
         str: A string containing the greeting message "Hello HBNB".
     """
-    return "Hello HBNB"
+    return "Hello HBNB!"
 
 
 if __name__ == "__main__":

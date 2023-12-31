@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
-from models.amenity import Amenity
+#from models.amenity import Amenity
 from sqlalchemy import (
     Column,
     String,
@@ -85,6 +85,7 @@ class Place(BaseModel, Base):
         @property
         def amenities(self):
             from models import storage  # Import DBStorage
+            from models.amenity import Amenity
 
             amenity_objs = []
             for amenity_id in self.amenity_ids:
@@ -100,8 +101,10 @@ class Place(BaseModel, Base):
                 Set by adding instance objs to amenity_ids attribute in Place
             '''
             from models import storage
+            from models.amenity import Amenity
             
             if amenity:
                 for amenity in storage.all(Amenity).values():
                     if amenity.place_id == self.id:
                         self.amenity_ids.append(amenity)
+

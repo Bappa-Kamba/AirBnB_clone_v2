@@ -45,13 +45,13 @@ class DBStorage:
                     key = "{}.{}".format(obj.__class__.__name__, obj.id)
                     db_dict[key] = obj
         else:
-            for c in classes:
-                if c.__name__ == cls:
-                    objs = self.__session.query(c).all()
-                    for obj in objs:
-                        key = "{}.{}".format(obj.__class__.__name__, obj.id)
-                        db_dict[key] = obj
-                    break
+            # for c in classes:
+            if cls in classes:
+                objs = self.__session.query(cls).all()
+                for obj in objs:
+                    key = "{}.{}".format(obj.__class__.__name__, obj.id)
+                    db_dict[key] = obj
+                    # break
         return db_dict
 
     def new(self, obj):

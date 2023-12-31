@@ -169,7 +169,7 @@ class HBNBCommand(cmd.Cmd):
         if storage_type != "db":
             key = c_name + "." + c_id
         try:
-            print(storage.all(key))
+            print(storage.all(key).items())
         except KeyError:
             print("** no instance found **")
 
@@ -245,7 +245,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
 
-        for k, _ in storage.all(c_name):
+        for k, _ in storage.all(c_name).items():
             if c_name == k.split('.')[0]:
                 count += 1
         print(count)
@@ -281,7 +281,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         # determine if key is present
-        if key not in storage.all():
+        if key not in storage.all().items():
             print("** no instance found **")
             return
 
@@ -315,7 +315,7 @@ class HBNBCommand(cmd.Cmd):
             args = [att_name, att_val]
 
         # retrieve dictionary of current objects
-        new_dict = storage.all()[key]
+        new_dict = storage.all().items()[key]
 
         # iterate through attr names and values
         for i, att_name in enumerate(args):

@@ -169,7 +169,7 @@ class HBNBCommand(cmd.Cmd):
         if storage_type != "db":
             key = c_name + "." + c_id
         try:
-            print(storage.all(key).items())
+            print(storage.all()[key])
         except KeyError:
             print("** no instance found **")
 

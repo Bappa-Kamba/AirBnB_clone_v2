@@ -28,8 +28,8 @@ class DBStorage:
         if env == "test":
             # drop all tables
             Base.metadata.drop_all(self.__engine)
-        self.__session = scoped_session(sessionmaker(
-            bind=self.__engine, expire_on_commit=False))
+        # self.__session = scoped_session(sessionmaker(
+        #     bind=self.__engine, expire_on_commit=False))
         
     def all(self, cls=None):
         '''
@@ -85,7 +85,7 @@ class DBStorage:
         if self.__session:
             self.__session.close()
 
-        Base.metadata.create_all(self.__engine)
+        self.__session = Base.metadata.create_all(self.__engine)
         factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(factory)
         self.__session = Session()
@@ -95,4 +95,4 @@ class DBStorage:
         """
         calls remove() method on the private session attribute(self.__session)
         """
-        self.__session.remove()
+        self.__session.close()

@@ -219,8 +219,9 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for _, v in storage.all(args).items():
-                print_list.append(str(v))
+            for k, v in storage.all().items():
+                if k.split('.')[0] == args:
+                    print_list.append(str(v))
         else:
             for k, v in storage.all().items():
                 print_list.append(str(v))
@@ -244,7 +245,9 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
 
-        count = len(storage.all(c_name))
+        for k, _ in storage.all(c_name).items():
+            if c_name == k.split('.')[0]:
+                count += 1
         print(count)
 
     def help_count(self):

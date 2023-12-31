@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ Console Module """
 import cmd
+from os import getenv
 import sys
 from models.base_model import BaseModel
 from models.__init__ import storage
@@ -11,6 +12,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 
+storage_type = getenv("HBNB_TYPE_STORAGE")
 
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
@@ -162,10 +164,12 @@ class HBNBCommand(cmd.Cmd):
         if not c_id:
             print("** instance id missing **")
             return
-
-        key = c_name + "." + c_id
+        
+        key = c_name
+        if storage_type != "db":
+            key = c_name + "." + c_id
         try:
-            print(storage._FileStorage__objects[key])
+            print(storage.all(key))
         except KeyError:
             print("** no instance found **")
 

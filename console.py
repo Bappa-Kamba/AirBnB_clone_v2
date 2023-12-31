@@ -241,8 +241,8 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
 
-        for k, v in storage.all(c_name):
-            if args == k.split('.')[0]:
+        for k, _ in storage.all(c_name):
+            if c_name == k.split('.')[0]:
                 count += 1
         print(count)
 

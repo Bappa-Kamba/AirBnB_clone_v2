@@ -166,11 +166,10 @@ class HBNBCommand(cmd.Cmd):
             return
         
         key = c_name
-        if storage_type != "db":
-            key = c_name + "." + c_id
         try:
-            print(key)
-            print(storage.all()[key])
+            if storage_type != "db":
+                key = c_name + "." + c_id
+            print(storage.all(key).items())
         except KeyError:
             print("** no instance found **")
 
@@ -220,9 +219,8 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage.all().items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
+            for _, v in storage.all(args).items():
+                print_list.append(str(v))
         else:
             for k, v in storage.all().items():
                 print_list.append(str(v))
@@ -246,9 +244,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
 
-        for k, _ in storage.all(c_name).items():
-            if c_name == k.split('.')[0]:
-                count += 1
+        count = len(storage.all(c_name))
         print(count)
 
     def help_count(self):

@@ -10,6 +10,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+
 class DBStorage:
     """This class manages storage of hbnb models in a database"""
 
@@ -24,7 +25,8 @@ class DBStorage:
         host = getenv("HBNB_MYSQL_HOST")
         db = getenv("HBNB_MYSQL_DB")
         env = getenv("HBNB_ENV", "none")
-        self.__engine = create_engine(f"mysql+mysqldb://{user}:{pwd}@{host}/{db}",
+        self.__engine = create_engine(
+            f"mysql+mysqldb://{user}:{pwd}@{host}/{db}",
                                       pool_pre_ping=True)
         if env == "test":
             # drop all tables
@@ -76,7 +78,8 @@ class DBStorage:
                 self.__session.delete(obj)
                 self.save()
             except Exception as e:
-                self.__session.rollback()  # Roll back changes if deletion fails
+                #Roll back changes if deletion fails
+                self.__session.rollback()
                 print(f"Error occurred while deleting: {e}")
 
     def reload(self):
@@ -88,7 +91,6 @@ class DBStorage:
         Session = scoped_session(factory)
         self.__session = Session()
 
-        
     def close(self):
         """
         calls remove() method on the private session attribute(self.__session)

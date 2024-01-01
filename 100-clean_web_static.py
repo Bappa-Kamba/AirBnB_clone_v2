@@ -11,7 +11,10 @@ Usage:
 from fabric.api import local, env, put, run
 from time import strftime
 import os.path
-env.hosts = ['54.197.82.225', '54.157.180.23']
+env.hosts = ['52.3.253.65', '100.25.179.167']
+env.user = 'ubuntu'
+env.sudo_user = 'ubuntu'
+env.key_filename = '~/.ssh/school'
 
 
 def do_pack():

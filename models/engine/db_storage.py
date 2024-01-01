@@ -24,7 +24,8 @@ class DBStorage:
         host = getenv("HBNB_MYSQL_HOST")
         db = getenv("HBNB_MYSQL_DB")
         env = getenv("HBNB_ENV", "none")
-        self.__engine = create_engine(f"mysql+mysqldb://{user}:{pwd}@{host}/{db}", pool_pre_ping=True)
+        self.__engine = create_engine(f"mysql+mysqldb://{user}:{pwd}@{host}/{db}",
+                                      pool_pre_ping=True)
         if env == "test":
             # drop all tables
             Base.metadata.drop_all(self.__engine)
@@ -82,9 +83,6 @@ class DBStorage:
         '''
             Commit all changes of current database session
         '''
-        if self.__session:
-            self.__session.close()
-
         self.__session = Base.metadata.create_all(self.__engine)
         factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(factory)

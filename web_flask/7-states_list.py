@@ -19,10 +19,10 @@ from models import storage
 from models.state import State
 
 # Get the parent directory path
-# parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 # Add the parent directory to the Python path
-# sys.path.append(parent_dir)
+sys.path.append(parent_dir)
 
 
 app = Flask(__name__)

@@ -24,7 +24,7 @@ class State(BaseModel, Base):
     else:
         @property
         def cities(self):
-            """ 
+            """
             Getter attribute to retrieve cities associated with this state
             """
             from models import storage

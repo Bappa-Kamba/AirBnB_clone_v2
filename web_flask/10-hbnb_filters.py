@@ -21,6 +21,7 @@ Example:
 from flask import Flask, render_template
 from models import storage
 from models.state import State
+from models.amenity import Amenity
 
 app = Flask(__name__)
 
@@ -89,9 +90,15 @@ def hbnb_filters():
         key=lambda state: state.name
     )
 
+    amenities = sorted(
+        [amenity for amenity in storage.all(Amenity).values()],
+        key=lambda amenity: amenity.name
+    )
+
     return render_template(
         "10-hbnb_filters.html",
-        states=states
+        states=states,
+        amenities=amenities
     )
 
 

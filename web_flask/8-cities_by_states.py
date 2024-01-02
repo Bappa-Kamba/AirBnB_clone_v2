@@ -13,8 +13,8 @@ Usage:
 Example:
     $ python3 8-cities_by_states.py
 """
-import os
-import sys
+# import os
+# import sys
 from flask import Flask, render_template
 from models import storage
 from models.state import State

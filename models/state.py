@@ -24,8 +24,14 @@ class State(BaseModel, Base):
     else:
         @property
         def cities(self):
-            """ Getter attribute to retrieve cities associated with this state """
+            """ 
+            Getter attribute to retrieve cities associated with this state
+            """
             from models import storage
 
-            city_instances = storage.all(City)  # Assuming 'City' is your City class
-            return [city for city in city_instances.values() if city.state_id == self.id]
+            # Assuming 'City' is your City class
+            city_instances = storage.all(City)
+            return [
+                city for city in city_instances.values()
+                if city.state_id == self.id
+            ]

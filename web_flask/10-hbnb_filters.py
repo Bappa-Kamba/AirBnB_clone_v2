@@ -10,23 +10,17 @@ Routes:
     /states: Renders a template similar to the `/states_list` route
     /states/<int:id>: Renders a template that displays the cities in a state
                         if the `id` is valid
+    /hbnb_filters: Renders a template like 6-index.html which was done
+                    during the project "0x01. AirBnB clone - Web static"
 Usage:
     Run this script to start the Flask web server.
 
 Example:
-    $ python3 9-states.py
+    $ python3 10-hbnb_filters.py
 """
-import os
-import sys
 from flask import Flask, render_template
 from models import storage
 from models.state import State
-
-# Get the parent directory path
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-
-# Add the parent directory to the Python path
-sys.path.append(parent_dir)
 
 app = Flask(__name__)
 
@@ -81,6 +75,24 @@ def states(id):
         if state.id == id:
             return render_template("9-states.html", state=state)
     return render_template("9-states.html")
+
+
+@app.route("/hbnb_filters", strict_slashes=False)
+def hbnb_filters():
+    """
+        Renders a template like 6-index.html which was done
+        during the project "0x01. AirBnB clone - Web static"
+    """
+    # Fetch states
+    states = sorted(
+        [state for state in storage.all(State).values()],
+        key=lambda state: state.name
+    )
+
+    return render_template(
+        "10-hbnb_filters.html",
+        states=states
+    )
 
 
 if __name__ == "__main__":

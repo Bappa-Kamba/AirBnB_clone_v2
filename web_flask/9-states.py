@@ -18,16 +18,15 @@ Example:
 """
 import os
 import sys
+from flask import Flask, render_template
+from models import storage
+from models.state import State
 
 # Get the parent directory path
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 # Add the parent directory to the Python path
 sys.path.append(parent_dir)
-
-from flask import Flask, render_template
-from models import storage
-from models.state import State
 
 app = Flask(__name__)
 
@@ -38,6 +37,7 @@ def clean_up(self):
         removes the current SQLAlchemy Session
     """
     storage.close()
+
 
 @app.route("/states", strict_slashes=False)
 @app.route("/states_list", strict_slashes=False)
@@ -60,7 +60,10 @@ def cities_by_states():
         DBStorage
     """
     # Fetch states
-    states = sorted([state for state in storage.all(State).values()], key=lambda state: state.name)
+    states = sorted(
+        [state for state in storage.all(State).values()],
+        key=lambda state: state.name
+    )
     return render_template(
             "8-cities_by_states.html",
             states=states

@@ -14,6 +14,9 @@ Example:
 """
 import os
 import sys
+from flask import Flask, render_template
+from models import storage
+from models.state import State
 
 # Get the parent directory path
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -21,9 +24,6 @@ parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 # Add the parent directory to the Python path
 sys.path.append(parent_dir)
 
-from flask import Flask, render_template
-from models import storage
-from models.state import State
 
 app = Flask(__name__)
 
@@ -47,6 +47,7 @@ def states_list():
     sorted_states = sorted(states, key=lambda state: state.name)
     print(sorted_states)
     return render_template("7-states_list.html", states=sorted_states)
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)

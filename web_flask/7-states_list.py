@@ -12,17 +12,17 @@ Usage:
 Example:
     $ python3 7-states_list.py
 """
-import os
-import sys
+# import os
+# import sys
 from flask import Flask, render_template
 from models import storage
 from models.state import State
 
 # Get the parent directory path
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+# parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 # Add the parent directory to the Python path
-sys.path.append(parent_dir)
+# sys.path.append(parent_dir)
 
 
 app = Flask(__name__)
@@ -50,4 +50,4 @@ def states_list():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000)

@@ -19,10 +19,10 @@ from models import storage
 from models.state import State
 
 # Get the parent directory path
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+# parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 # Add the parent directory to the Python path
-sys.path.append(parent_dir)
+# sys.path.append(parent_dir)
 
 
 app = Flask(__name__)
@@ -45,7 +45,7 @@ def states_list():
 
     states = [state for state in storage.all(State).values()]
     sorted_states = sorted(states, key=lambda state: state.name)
-    print(sorted_states)
+
     return render_template("7-states_list.html", states=sorted_states)
 
 
